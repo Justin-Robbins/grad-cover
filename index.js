@@ -21,7 +21,7 @@ app.post('/', (req, res) => {
   const event = req.body;
 
   if (event.type === 'CARD_CLICKED') {
-    const action = event.action?.actionMethodName;
+    const action = event.commonEventObject?.invokedFunction || event.action?.function;
     
     if (action === 'confirm') {
       return res.json({ text: '✅ You clicked Confirm!' });
@@ -42,11 +42,19 @@ app.post('/', (req, res) => {
               buttons: [
                 {
                   text: 'Confirm',
-                  onClick: { action: { actionMethodName: 'confirm' } }
+                  onClick: {
+                    action: {
+                      function: 'confirm'
+                    }
+                  }
                 },
                 {
                   text: 'Deny',
-                  onClick: { action: { actionMethodName: 'deny' } }
+                  onClick: {
+                    action: {
+                      function: 'deny'
+                    }
+                  }
                 }
               ]
             }
@@ -82,8 +90,22 @@ app.post('/send-messages', async (req, res) => {
                   widgets: [{
                     buttonList: {
                       buttons: [
-                        { text: 'Confirm', onClick: { action: { actionMethodName: 'confirm' } } },
-                        { text: 'Deny', onClick: { action: { actionMethodName: 'deny' } } }
+                        {
+                          text: 'Confirm',
+                          onClick: {
+                            action: {
+                              function: 'confirm'
+                            }
+                          }
+                        },
+                        {
+                          text: 'Deny',
+                          onClick: {
+                            action: {
+                              function: 'deny'
+                            }
+                          }
+                        }
                       ]
                     }
                   }]
